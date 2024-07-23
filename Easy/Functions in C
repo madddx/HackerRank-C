@@ -1,0 +1,22 @@
+#include<stdio.h>
+#include<string.h>
+int max(int a,int b)
+{
+    if (a>b)
+      return a;
+    else 
+      return b;
+        
+}
+
+int main() {
+
+    int a, b, c, d;
+    scanf("%d %d %d %d", &a, &b, &c, &d);
+    int ans = max(a, b);
+    int ans1=max(c,d);
+    int ans2=max(ans,ans1);
+    printf("%d", ans2);
+    
+    return 0;
+}
