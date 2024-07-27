@@ -1,0 +1,31 @@
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <stdlib.h>
+
+int find_nth_term(int n, int a, int b, int c) 
+{
+    if (n < 4)
+        return c;
+      
+    int next = a + b + c;
+    return find_nth_term(n -1, b, c, next);
+}
+
+int main() 
+{
+    unsigned int n, a, b, c, ans;
+    scanf("%d %d %d %d", &n, &a, &b, &c);
+        
+    if (n > 0) {  // error handling
+        switch (n) {
+            case 1: ans = a; break;
+            case 2: ans = b; break;
+            case 3: ans = c; break;
+            default: ans = find_nth_term(n, a, b, c);
+        }        
+        printf("%d", ans); 
+    }
+        
+    return 0;
+}
