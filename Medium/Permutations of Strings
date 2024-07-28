@@ -1,0 +1,29 @@
+int next_permutation(int n, char **s)
+{
+    for (int i=n-2; i>=0; i--)
+    {
+        if (strcmp(s[i], s[i+1]) < 0)
+        {
+            for (int j=n-1; j>i; j--)
+            {
+                if (strcmp(s[j], s[i]) > 0)
+                {
+                    char *temp = s[i];
+                    s[i] = s[j];
+                    s[j] = temp;
+                    
+                    for (int t=i+1, k=n-1; t<k; t++, k--)
+                    {
+                        char *temp = s[t];
+                        s[t] = s[k];
+                        s[k] = temp;
+                    }
+
+                    return 1;
+                }
+            }
+        }
+    }
+
+    return 0;
+}
