@@ -1,0 +1,116 @@
+#define DEFAULT_LEN 8
+
+char* kth_word_in_mth_sentence_of_nth_paragraph(char**** document, int k, int m, int n) {
+    return document[n - 1][m - 1][k - 1];
+}
+
+char** kth_sentence_in_mth_paragraph(char**** document, int k, int m) { 
+    return document[m - 1][k - 1];
+}
+
+char*** kth_paragraph(char**** document, int k) {
+    return document[k - 1];
+}
+
+void insert_char(char** word, int* word_len, char ch) {
+    (*word_len)++;
+    (*word) = realloc(*word, sizeof(char) * (*word_len));
+    (*word)[*word_len - 1] = ch;
+}
+
+int is_whitespace(char ch) {
+    return ch == ' ' || ch == '\t';
+}
+
+void trim_whitespace(char* text, int* character) {
+    while (is_whitespace(text[*character])) {
+        (*character)++;
+    }
+}
+
+int is_text(char ch) {
+    return (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z');
+}
+
+int is_sentence_terminator(char ch) {
+    return ch == '.';
+}
+
+int is_paragraph_terminator(char ch) {
+    return ch == '\n' || ch == '\0';
+}
+
+char next_character(char* text, int* character) {
+    return text[(*character)++];
+}
+
+char* next_word(char* text, int* character) {
+    char* word = malloc(DEFAULT_LEN * sizeof(char));
+    int word_size = 0;
+    
+    while (is_text(text[*character])) {
+        char ch = next_character(text, character);
+        insert_char(&word, &word_size, ch);
+    }
+    
+    // Insert a zero to end the word.
+    insert_char(&word, &word_size, 0);
+    return word;
+}
+
+char** next_sentence(char* text, int* character) {
+    char** sentence = malloc(DEFAULT_LEN * sizeof(char*));
+    int sentence_len = 0;
+    
+    while (!is_sentence_terminator(text[*character])) {
+        trim_whitespace(text, character);
+        char* word = next_word(text, character);
+    
+        sentence_len++;
+        sentence = realloc(sentence, sentence_len * sizeof(char*));
+        
+        sentence[sentence_len - 1] = word;
+    }
+    
+    // Move past the period.
+    next_character(text, character);
+    
+    return sentence;
+}
+
+char*** next_paragraph(char* text, int* character) {
+    char*** paragraph = malloc(DEFAULT_LEN * sizeof(char**));
+    int paragraph_len = 0;
+    
+    while (!is_paragraph_terminator(text[*character])) {
+        char** sentence = next_sentence(text, character);
+    
+        paragraph_len++;
+        paragraph = realloc(paragraph, paragraph_len * sizeof(char**));
+        
+        paragraph[paragraph_len - 1] = sentence;
+    }
+    
+    return paragraph;
+}
+
+char**** get_document(char* text) {
+    char**** document = malloc(DEFAULT_LEN * sizeof(char***));
+    int character = 0;
+    
+    int doc_len = 0;
+    int last_paragraph = 0;
+    
+    while (!last_paragraph) {
+        char*** paragraph = next_paragraph(text, &character);
+        last_paragraph = next_character(text, &character) == '\0';
+    
+        doc_len++;
+        document = realloc(document, doc_len * sizeof(char***));
+        
+        document[doc_len - 1] = paragraph;
+    }
+    
+    return document;
+}
+
