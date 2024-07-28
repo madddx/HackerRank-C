@@ -1,0 +1,54 @@
+#include <stdarg.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+#define MIN_ELEMENT 1
+#define MAX_ELEMENT 1000000
+int  sum (int count,...) {
+int sum = 0;
+va_list ptr;
+va_start(ptr, count);
+for(int i=0; i<count; i++){
+    sum+= va_arg(ptr, int);
+}
+va_end(ptr);
+return sum;
+}
+
+int min(int count,...) {
+
+va_list ptr;
+
+va_start(ptr,count);
+
+int min = va_arg(ptr,int);
+
+for(int i=0; i<count;i++){
+    int next = va_arg(ptr,int);
+    
+    if (next < min){
+        min = next;
+    }
+}
+va_end(ptr);
+
+
+return(min);
+}
+
+int max(int count,...) {
+va_list ptr;    
+va_start(ptr,count);
+ 
+int max = va_arg(ptr,int);
+
+for(int i=0; i<count; i++){
+    int next = va_arg(ptr, int);
+    if(next > max){
+        max = next;
+    }
+}
+
+return(max);
+}
